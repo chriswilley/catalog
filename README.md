@@ -123,7 +123,7 @@ FACEBOOK_CONFIG = {"web":{"app_id":"[a long string of numbers]","app_secret":"[a
 
 ## Google Authentication
 
-To use Google for authentication, you'll need a Google developer account. Then you will need to create a web project and generate an OAuth2.0 Client ID, which you can then download as a JSON file (see below). See [Google's API docs](https://developers.google.com/identity/sign-in/web/devconsole-project) for more info (the documentation page linked here says you don't need to create Authroized Redirect URIs, but you do; see below).
+To use Google for authentication, you'll need a Google developer account. Then you will need to create a web project and generate an OAuth2.0 Client ID, which you can then download as a JSON file (see below). See [Google's API docs](https://developers.google.com/identity/sign-in/web/devconsole-project) for more info (the documentation page linked here says you don't need to create Authorized Redirect URIs, but you do; see below).
 
 Once you've established the credentials for a new project in the Google Developer's console, you need to create a config_secrets.json file in the 'instance/' folder along with the config.py file. Here's what your client_secrets.json file will look like when you're done:
 

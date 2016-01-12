@@ -16,7 +16,6 @@ from flask import (
     url_for
 )
 from sqlalchemy import or_
-from sqlalchemy.orm.exc import NoResultFound
 from urllib import urlencode
 
 from . import home
@@ -366,7 +365,7 @@ def favoriteBook(book_id, **kwargs):
     return redirect(url_for('home.showBooks'))
 
 
-@home.route('/books/<int:book_id>/delete/')
+@home.route('/books/<int:book_id>/delete/', methods=['POST'])
 @login_required()
 @book_exists
 def deleteBook(book_id, **kwargs):
@@ -376,13 +375,16 @@ def deleteBook(book_id, **kwargs):
     """
     book = kwargs['book']
 
-    if (book.lender == g.user):
-        # aaaaand the user must also be the lender
-        # no sneaking off deleting other user's books
-        db.session.delete(book)
-        db.session.commit()
+    form = BookForm(obj=book)
 
-    flash('<em>' + book.title + '</em> removed.')
+    if (form.validate_on_submit()):
+        if (book.lender == g.user):
+            # the user must also be the lender
+            # no sneaking off deleting other user's books
+            db.session.delete(book)
+            db.session.commit()
+
+            flash('<em>' + book.title + '</em> removed.')
 
     return redirect(url_for('home.showBooks'))
 

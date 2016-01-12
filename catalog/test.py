@@ -1,5 +1,4 @@
 import datetime as dt
-import json
 import re
 import unittest
 import urllib
@@ -1002,7 +1001,7 @@ class CatalogTestCase(TestCase):
 
         # first try to delete a book without logging in
         url = '/books/' + str(book.id) + '/delete/'
-        response = self.client.get(url)
+        response = self.client.post(url)
 
         # user should be redirected
         self.assert_redirects(
@@ -1017,7 +1016,7 @@ class CatalogTestCase(TestCase):
             session['email'] = 'admin@catalog.com'
 
         # now try to delete a non-existent book
-        response = self.client.get('/books/8675309/delete/')
+        response = self.client.post('/books/8675309/delete/')
         # user should be redirected
         self.assert_redirects(response, '/books/')
         # book still there
@@ -1025,7 +1024,7 @@ class CatalogTestCase(TestCase):
             int(Book.query.filter_by(title='Rarnaby Budge').count()), 1)
 
         # now for real
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assert_redirects(response, '/books/')
 
         # book is gone
@@ -1064,7 +1063,7 @@ class CatalogTestCase(TestCase):
             session['email'] = user2.email
 
         url = '/books/' + str(book.id) + '/delete/'
-        response = self.client.get(url)
+        response = self.client.post(url)
         # user should be redirected, and book still exists
         self.assert_redirects(response, '/books/')
         revised_book = Book.query.filter_by(title='David Coperfield').one()

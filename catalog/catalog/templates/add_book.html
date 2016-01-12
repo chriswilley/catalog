@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Lending Library -- Add A Book{% endblock %}
+{% block title %}Lending Library -- {{ action|capitalize }} A Book{% endblock %}
 
 {% block body %}
         <div class="site-wrapper duck-head">
@@ -11,7 +11,7 @@
                         <h1 class="text-center">{{ action|capitalize }} a Book</h1>
                         <p>&nbsp;</p>
                         {% include 'form_errors.html' %}
-                        <form class="form-horizontal" enctype="multipart/form-data" action="{{ form_action }}" method="POST">
+                        <form id="bookform" class="form-horizontal" enctype="multipart/form-data" action="{{ form_action }}" method="POST">
                             {{ form.csrf_token }}
                             <div class="form-group{% if form.title.flags.required %} required{% endif %}">
                                 {{ form.title.label(class="col-sm-2 control-label") }}
@@ -71,7 +71,9 @@
 <script>
 function deleteBook(url) {
     if (confirm('Are you sure you want to remove this book from the library?')) {
-        window.location.href = url;
+        //window.location.href = url;
+        $('#bookform').attr('action', url);
+        $('#bookform').submit();
     }
 }
 </script>
