@@ -1,0 +1,15 @@
+<div class="col-xs-6 col-sm-3 placeholder">
+    <div class="book-image">
+        <div class="book-overlay text-center"><span><i class="fa fa-info-circle bookinfo-button" data-tip="tooltip" title="View Book Info" data-trigger="hover" data-info-url="{{ url_for('home.bookInfo', book_id=book.id) }}" data-toggle="modal" data-target="#bookinfo"></i></span></div>
+        {% if (book.picture and 'http' in book.picture) %}
+            <img src="{{ book.picture }}" />
+        {% elif book.picture %}
+            <img src="{{ url_for('home.media', filename=book.picture) }}" />
+        {% else %}
+            <i class="fa fa-book fa-5x"></i>
+        {% endif %}
+    </div>
+    <h4>{{ book.title }}{% if book.lender == g.user %} <a href="{{ url_for('home.editBook', book_id=book.id) }}" data-tip="tooltip" data-trigger="hover" title="Edit Book"><i class="fa fa-pencil"></i></a>{% endif %}</h4>
+    <span class="text-muted">{{ book.author }}</span><br />
+    <small><span id="rateYo{{ book.id }}" data-rating="{{ book.calc_rating() }}" data-tip="tooltip" title="Current rating: {{ book.calc_rating() }}"></span>&nbsp;<a href="{{ url_for('home.reviewBook', book_id=book.id) }}" data-tip="tooltip" title="Read reviews, and write your own">{{ book.rating|length }}&nbsp;review{{ book.rating|length|pluralize }}</a>{% if book in g.user.favorite_books %}&nbsp;&nbsp;<i class="fa fa-heart" style="color:#f00;" data-tip="tooltip" data-trigger="hover" title="One of your favorite books"></i>{% else %}&nbsp;&nbsp;<a class="favorite-link" href="{{ url_for('home.favoriteBook', book_id=book.id) }}" data-tip="tooltip" data-trigger="hover" title="Mark as favorite"><i class="fa fa-heart-o"></i></a>{% endif %}</small>
+</div>

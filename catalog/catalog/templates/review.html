@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Lending Library -- Review Book{% endblock %}
+
+{% block body %}
+        <div class="site-wrapper duck-head">
+            <div class="row wrap-inner">
+                <div class="container clear-top">
+                    <div class="col-sm-2">
+                        <br />
+                        <a href="{{ url_for('home.showBooks') }}"><button class="btn btn-primary btn-xs"><i class="fa fa-chevron-left"></i> Back to Book List</button></a>
+                    </div>
+                    <div class="col-sm-8">
+                        {% include 'message_alerts.html' %}
+                        <h1 class="text-center">Review <em>{{ book.title }}</em></h1>
+                        {% if not form is none %}
+                            {% include 'form_errors.html' %}
+                            <form class="form" action="{{ url_for('home.reviewBook', book_id=book.id) }}" method="POST">
+                                {{ form.csrf_token }}
+                                {{ form.rating(value="0.0") }}
+                                <div class="form-group">
+                                    <div class="col-sm-12 text-center" id="form-wrapper">
+                                        <div class="rating-container"><div id="rateYo"></div>
+                                        <div class="counter"></div></div>
+                                        <br />
+                                        {{ form.review(class="form-control", rows="5", placeholder="Write a review here...") }}
+                                        <br />
+                                    </div>
+                                </div>
+                                <p class="text-center"><button type="submit" class="btn btn-primary">Submit Review</button>&nbsp;<a href="{{ url_for('home.showBooks') }}" class="btn btn-default">Cancel</a></p>
+                            </form>
+                        {% else %}
+                            <h3>You have already reviewed this book.</h3>
+                        {% endif %}
+                        <p>&nbsp;</p>
+                        <h3 class="text-center">Other reviews of <em>{{ book.title }}</em></h3>
+                        {% if book.rating|length == 0 %}
+                            <p>No one has reviewed this book yet. Be the first!</p>
+                        {% else %}
+                            {% for r in book.rating %}
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <img src="{{ r.rater.picture }}" width="40" height="40" />
+                                    </div>
+                                    <div class="col-sm-11">
+                                        <strong>{{ r.rater.name }} ({{ r.rater.email }})</strong>
+                                        <div class="review-text">{{ r.review }}</div>
+                                        <span id="rateYo2.{{ r.rater.id }}" data-rating="{{ r.rating }}" data-tip="tooltip" data-trigger="hover" title="Rating: {{ r.rating }}"></span>
+                                    </div>
+                                </div>
+                                {% if not loop.last %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <hr />
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block footextra %}
+    <script>
+        $('#rateYo').rateYo({
+            rating: {{ book.calc_rating() }},
+            normalFill: '#b6b6b6',
+            ratedFill: '#ffeb3b'
+        }).on('rateyo.set', function(e, data) {
+            $('input#rating').attr('value', parseFloat(data.rating));
+        }).on('rateyo.change', function(e, data) {
+            $(this).next().text(data.rating);
+        });
+
+        $('span[id^="rateYo2."]').each(function(){
+            $(this).rateYo({
+                rating: $(this).data('rating'),
+                starWidth: '11px',
+                readOnly: true,
+                normalFill: '#b6b6b6',
+                ratedFill: '#ffeb3b'
+            });
+        });
+
+        $('[data-tip="tooltip"]').tooltip();
+
+        var yoMargin;
+
+        function setYoMargin() {
+            yoMargin = ($('#form-wrapper').width() - 170) / 2;
+            $('.rating-container').css('margin-left', yoMargin);
+        }
+
+        $(document).ready(setYoMargin());
+
+        $(window).resize(function() {
+            setYoMargin();
+        });
+    </script>
+    <style>
+        polygon {
+            stroke: #000;
+            stroke-width: 10px;
+        }
+
+        span.jq-ry-container {
+            margin-top: 5px;
+            padding-left: 0px;
+        }
+
+        div.rating-container {
+            position: relative;
+            width: 170px;
+        }
+
+        div.rating-container div.counter {
+          display: none;
+          position: absolute;
+          min-width: 20px;
+          padding: 5px;
+          font-size: 15px;
+          line-height: 0px;
+          height: 20px;
+          background-color: rgba(0, 0, 0, 0.8);
+          top: 50%;
+          right: -36px;
+          margin-top: -10px;
+          color: white;
+        }
+
+        div.rating-container div.counter:before,
+        div.rating-container div.counter ::before {
+          content: "";
+          width: 0;
+          height: 0;
+          top: 50%;
+          margin-top: -5px;
+          display: block;
+          border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+          border-width: 5px 5px 5px 0px;
+          left: -10px;
+          border-style: solid;
+          position: relative;
+        }
+
+        div.rating-container:hover div.counter {
+          display: block;
+        }
+    </style>
+{% endblock %}

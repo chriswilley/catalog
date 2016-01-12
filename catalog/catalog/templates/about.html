@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Lending Library -- About This Site{% endblock %}
+
+{% block body %}
+        <div class="site-wrapper duck-head">
+            <div class="row wrap-inner">
+                <div class="container clear-top">
+                    <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 text-left">
+                        <h1 class="text-center">About This Site</h1>
+                        <h4>What is this?</h4>
+                        <p>LendingLibrary is a site developed using Flask as part of my work toward a Nanodegree in Full Stack Web Development offered by Udacity. The site enables a team or other group of people to share books they own for others in the group to borrow. The site offers pretty comprehensive functionality, including:</p>
+                        <ul>
+                            <li>Ability to create an account and sign in using Google+ or Facebook.</li>
+                            <li>Ability to see detailed info about each book in the Library including whether it is checked out (and when it's due back).</li>
+                            <li>Ability to add books to the database.</li>
+                            <li>Ability for a lender to edit or remove books s/he added to the Library.</li>
+                            <li>Ability to check out and return books.</li>
+                            <li>Ability to write reviews of books in the database.</li>
+                            <li>Ability to mark books as "favorites".</li>
+                            <li>Ability to search for books in the library by author, title, or synopsis.</li>
+                            <li>Ability to browse books by genre (category).</li>
+                            <li>Integration with the Google Books API to pull in cover art and other metadata.</li>
+                            <li>Complete set of unit tests to ensure a working application.</li>
+                        </ul>
+                        <p>This is a working app and is open source, so <a href="https://github.com/chriswilley/catalog">feel free to use</a>!</p>
+                        <br />
+                        <h4>Shout Outs</h4>
+                        <p>This site was developed using the following third party add-ons in addition to Flask and some Flask extensions:</p>
+                        <ul>
+                            <li><a href="http://prrashi.github.io/rateYo/">RateYo!</a>, a jQuery plugin for handling 5-star ratings using SVG.</li>
+                        </ul>
+                        <p>Bootstrap, FontAwesome and jQuery were also used, but doesn't that kinda go without saying these days?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Lending Library -- Books{% endblock %}
+
+{% block body %}
+        <div class="site-wrapper duck-head">
+            <div class="wrap-inner">
+                <div class="container-fluid clear-top">
+                    <div class="col-sm-2 sidebar">
+                    {% include 'sidebar.html' %}
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-2 main">
+                        {% include 'message_alerts.html' %}
+                        <span class="pull-right" style="display: inline;"><br />
+                        <div class="dropdown"><a href="{{ url_for('home.addBook') }}" data-tip="tooltip" title="Add Book" data-placement="bottom" data-trigger="hover"><span class="fa-stack fa-lg" style="display: inline-block;"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></a>&nbsp;<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-tip="tooltip" title="Book List API" data-trigger="hover" data-placement="bottom"><span class="fa-stack fa-lg" style="display: inline-block;"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-code fa-stack-1x fa-inverse"></i></span></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-header">List These Books</li>
+                            <li><a href="{% if f_type %}{% if f_type == 'category' %}{{ url_for('home.booksAPI', bookfilter='category', thisCategory=this_category) }}{% else %}{{ url_for('home.booksAPI', bookfilter=f_type) }}{% endif %}{% else %}{{ url_for('home.booksAPI') }}{% endif %}">... as JSON</a></li>
+                            <li><a href="{% if f_type %}{% if f_type == 'category' %}{{ url_for('home.booksAPI', bookfilter='category', thisCategory=this_category, apiFormat='XML') }}{% else %}{{ url_for('home.booksAPI', bookfilter=f_type, apiFormat='XML') }}{% endif %}{% else %}{{ url_for('home.booksAPI', bookfilter='None', apiFormat='XML') }}{% endif %}">... as XML</a></li>
+                            <li><a href="{% if f_type %}{% if f_type == 'category' %}{{ url_for('home.booksAPI', bookfilter='category', thisCategory=this_category, apiFormat='Atom') }}{% else %}{{ url_for('home.booksAPI', bookfilter=f_type, apiFormat='Atom') }}{% endif %}{% else %}{{ url_for('home.booksAPI', bookfilter='None', apiFormat='Atom') }}{% endif %}">... as Atom</a></li>
+                            <li><a href="{% if f_type %}{% if f_type == 'category' %}{{ url_for('home.booksAPI', bookfilter='category', thisCategory=this_category, apiFormat='RSS') }}{% else %}{{ url_for('home.booksAPI', bookfilter=f_type, apiFormat='RSS') }}{% endif %}{% else %}{{ url_for('home.booksAPI', bookfilter='None', apiFormat='RSS') }}{% endif %}">... as RSS 2.0</a></li>
+                            <li class="dropdown-header">List All Books</li>
+                            <li><a href="{{ url_for('home.booksAPI', bookfilter='all') }}">... as JSON</a></li>
+                            <li><a href="{{ url_for('home.booksAPI', bookfilter='all', apiFormat='XML') }}">... as XML</a></li>
+                            <li><a href="{{ url_for('home.booksAPI', bookfilter='all', apiFormat='Atom') }}">... as Atom</a></li>
+                            <li><a href="{{ url_for('home.booksAPI', bookfilter='all', apiFormat='RSS') }}">... as RSS 2.0</a></li>
+                        </ul>
+                        <br /></div></span>
+                        <div class="row placeholders">
+                            <h1>{{ header }}</h1>
+                            <p>&nbsp;</p>
+                            {% if books %}
+                                {% for book in books %}
+                                    {% include 'book_result.html' %}
+                                    {% if (loop.index % 4 == 0) %}
+                                </div>
+                                <div class="row placeholders">
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <h3 class="text-left">No books yet! <a href="{{ url_for('home.addBook') }}">Add one now.</a></h3>
+                            {% endif %}
+                        </div>
+                        {% if books2 %}
+                        <div class="row placeholders">
+                            <h1>{{ header2 }}</h1>
+                            <p>&nbsp;</p>
+                            {% for book in books2 %}
+                                    {% include 'book_result.html' %}
+                                {% if (loop.index % 4 == 0) %}
+                            </div>
+                            <div class="row placeholders">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'book_modal.html' %}
+{% endblock %}
+
+{% block footextra %}
+    {% include 'books_script.html' %}
+    <style>
+    .footer {
+        margin-left: 16.66666667%;
+    }
+
+    .jq-ry-container {
+        display: inline-block;
+        margin-top: 2px;
+    }
+
+    polygon {
+        stroke: #000;
+        stroke-width: 10px;
+    }
+    </style>
+{% endblock %}

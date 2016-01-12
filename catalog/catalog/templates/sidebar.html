@@ -1,0 +1,24 @@
+                        <ul class="nav nav-sidebar">
+                            <li{% if f_type == '' %} class="active"{% endif %}>
+                                <a href="{{ url_for('home.showBooks') }}">Recent</a>
+                            </li>
+                            {% if g.user %}
+                            <li{% if f_type == 'mybooks' %} class="active"{% endif %}>
+                                <a href="{{ url_for('home.showBooks', bookfilter='mybooks') }}">My Books</a>
+                            </li>
+                            <li{% if f_type == 'favorites' %} class="active"{% endif %}>
+                                <a href="{{ url_for('home.showBooks', bookfilter='favorites') }}">Favorites</a>
+                            </li>
+                            {% endif %}
+                            <li{% if form %} class="active"{% endif %}>
+                                <a href="{{ url_for('home.searchBooks') }}">Search</a>
+                            </li>
+                        </ul>
+                        <h4 style="display: block;">Genres</h4>
+                        <ul class="nav nav-sidebar">
+                        {% for category in categories %}
+                            <li{% if this_category == category %} class="active"{% endif %}>
+                                <a href="{{ url_for('home.showBooks', bookfilter='category', thisCategory=category.name) }}">{{ category.name }}&nbsp;({{ category.book_count }})</a>
+                            </li>
+                        {% endfor %}
+                        </ul>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>{% block title %}Lending Library{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.css">
+        <!-- Bootstrap core CSS -->
+        <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <!-- Custom styles for this template -->
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+        {% block headextra %}
+        {% endblock %}
+        <link href="{{ url_for('static', filename='app.css') }}" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="navbar navbar-inverse {% block adminnavbar %}{% endblock %}navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{ url_for('home.catalogHome') }}">Lending Library</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                {% if 'username' not in session %}
+                    <form class="navbar-form navbar-right" role="form">
+                        <a href="https://www.udacity.com/nanodegree" target="_new"><em>A Udacity Nanodegree Project</em></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="#"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginmodal">Sign in</button></a>
+                    </form>
+                {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="udacity-plug">
+                            <a href="https://www.udacity.com/nanodegree" target="new"><em>A Udacity Nanodegree Project</em></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ session.picture }}" height="40" width="40" /></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('auth.disconnect') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+
+        {% block body %}
+        {% endblock %}
+        <div class="modal" id="loginmodal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="title">Sign In:</h2>
+                    </div>
+                    <div class="modal-body" id="loginmodalbody">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <p style="display: block;">&copy; Chris Willey 2015
+                <span class="pull-right"><a href="{{ url_for('home.aboutCatalog') }}">About Lending Library</a></span></p>
+            </div>
+        </footer>
+        <!-- /container -->
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="{{ url_for('static', filename='assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        {% block footextra %}
+        {% endblock %}
+        <script>
+            $('#loginmodal').on('show.bs.modal', function (e) {
+                $('#loginmodalbody').load('/login/?next={{ request.args.get("next") }}');
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<script>
+    $(document).on('click', '.bookinfo-button', function (event) {
+        var allTitles = $('h2#title, span#title');
+        $.ajax({
+            method: 'GET',
+            url: $(this).data('info-url'),
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                b = data['Book']
+                $('div#bookinfo').find(allTitles).html(b['title']);
+                picStr = '<img src="' + b['picture'] + '" class="img-responsive" />';
+                $('#bookinfo').find('#picture').html(picStr);
+                bAuthor = b['author'];
+                if (bAuthor) {
+                    authStr = '<strong>Author:</strong> ' + bAuthor + '<br />&nbsp;';
+                    $('#bookinfo').find('#author').html(authStr);
+                }
+                bSynopsis = b['synopsis'];
+                if (bSynopsis) {
+                    synStr = '<strong>Synopsis:</strong><br />' + bSynopsis + '<br />&nbsp;';
+                    $('#bookinfo').find('#synopsis').html(synStr);
+                }
+                bYear = b['year_published'];
+                if (bYear) {
+                    yearPubStr = '<strong>Year Published:</strong> ' + bYear + '<br />&nbsp;';
+                    $('#bookinfo').find('#yearpublished').html(yearPubStr);
+                }
+                bLender = b['lender'];
+                if (bLender) {
+                    lendStr = '<strong>Lent By:</strong> ' + bLender;
+                    $('#bookinfo').find('#lender').html(lendStr);
+                }
+                bAvailable = b['is_available'];
+                if (bAvailable) {
+                    availStr = '<strong>This book is available.</strong>';
+                    $('#borrowbookform').attr('action', '/books/' + b['id'] + '/borrow/')
+                } else {
+                    availStr = '<strong>This book is not available. It is due back by ' + b['due_date'] + '.</strong>';
+                    $('#borrowbookform').html('');
+                }
+                {% if g.user %}
+                $('#bookinfo').find('#availability').html(availStr);
+                {% endif %}
+                if (b['borrower']) {
+                    if (b['borrower']['email'] == '{{ g.user.email }}') {
+                        $('#bookinfo').find('#availability').html('<strong>You have this book checked out. It is due back by ' + b['due_date'] + '.</strong>');
+                        $('#borrowbookform').html('<button class="btn btn-danger btn-large">Return this book</button>');
+                        $('#borrowbookform').attr('action', '/books/' + b['id'] + '/return/')
+                    }
+                }{% if g.user %} else {
+                    $('#borrowbookform').html('<button class="btn btn-primary btn-lg">Borrow this book</button>');
+                }{% endif %}
+            }
+        });
+    });
+
+    $('[data-tip="tooltip"]').tooltip();
+
+    $('.fa-heart-o').hover(
+        function() {
+            $(this).removeClass('fa-heart-o');
+            $(this).addClass('fa-heart');
+        },
+        function() {
+            $(this).removeClass('fa-heart');
+            $(this).addClass('fa-heart-o');
+        }
+    );
+
+    $('span[id^="rateYo"]').each(function(){
+        $(this).rateYo({
+            rating: $(this).data('rating'),
+            starWidth: '11px',
+            readOnly: true,
+            normalFill: '#b6b6b6',
+            ratedFill: '#ffeb3b'
+        });
+    });
+</script>

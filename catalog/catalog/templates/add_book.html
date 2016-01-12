@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Lending Library -- Add A Book{% endblock %}
+
+{% block body %}
+        <div class="site-wrapper duck-head">
+            <div class="row wrap-inner">
+                <div class="container clear-top">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        {% include 'message_alerts.html' %}
+                        <h1 class="text-center">{{ action|capitalize }} a Book</h1>
+                        <p>&nbsp;</p>
+                        {% include 'form_errors.html' %}
+                        <form class="form-horizontal" enctype="multipart/form-data" action="{{ form_action }}" method="POST">
+                            {{ form.csrf_token }}
+                            <div class="form-group{% if form.title.flags.required %} required{% endif %}">
+                                {{ form.title.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {{ form.title(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="form-group{% if form.author.flags.required %} required{% endif %}">
+                                {{ form.author.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {{ form.author(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="form-group{% if form.year_published.flags.required %} required{% endif %}">
+                                {{ form.year_published.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {{ form.year_published(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="form-group{% if form.category.flags.required %} required{% endif %}">
+                                {{ form.category.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {{ form.category(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="form-group{% if form.picture.flags.required %} required{% endif %}">
+                                {{ form.picture.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {% if book and book.picture %}
+                                        {% if 'http' in book.picture %}
+                                            <img height="60" class="pull-left" src="{{ book.picture }}" />
+                                        {% else %}
+                                            <img height="60" class="pull-left" src="{{ url_for('home.media', filename=book.picture) }}" />
+                                        {% endif %}<br />
+                                    {% endif %}
+                                    {{ form.picture(class="form-control") }}
+                                    {% if not book %}
+                                        <span class="help-block">{{ form.picture.description }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group{% if form.synopsis.flags.required %} required{% endif %}">
+                                {{ form.synopsis.label(class="col-sm-2 control-label") }}
+                                <div class="col-sm-10">
+                                    {{ form.synopsis(class="form-control", rows=7) }}
+                                </div>
+                            </div>
+                            <p class="text-center"><button type="submit" class="btn btn-primary">Save Book</button>&nbsp;<a href="{{ url_for('home.showBooks') }}" class="btn btn-default">Cancel</a>{% if (action == 'edit') %}&nbsp;&nbsp;&nbsp;<a href="javascript:deleteBook('{{ delete_url }}');" class="btn btn-danger">Remove from library</a>{% endif %}</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block footextra %}
+<script>
+function deleteBook(url) {
+    if (confirm('Are you sure you want to remove this book from the library?')) {
+        window.location.href = url;
+    }
+}
+</script>
+{% endblock %}

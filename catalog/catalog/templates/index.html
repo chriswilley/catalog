@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to the Lending Library{% endblock %}
+
+{% block headextra %}
+<link href="{{ url_for('static', filename='assets/css/jumbotron.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="site-wrapper">
+            <div class="jumbotron wrap-inner">
+                <div class="container">
+                    <h1 style="display: block;">Welcome to Lending Library</h1>
+                    <p style="display: block;">Have a book you'd like to lend? Looking for something good to read? That's what we're here for. Check out the latest titles added by your teammates, and add some yourself!</p>
+                    <p>&nbsp;</p>
+                    <p class="text-center"><a href="{{ url_for('home.showBooks') }}" class="btn btn-primary btn-lg" role="button">Browse the books</a></p>
+                </div>
+            </div>
+            <div class="container">
+            <p>&nbsp;</p>
+            {% include 'message_alerts.html' %}
+            </div>
+        </div>
+{% endblock %}
