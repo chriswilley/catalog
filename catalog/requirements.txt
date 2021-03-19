@@ -3,7 +3,7 @@ Flask-DebugToolbar==0.10.0
 Flask-SQLAlchemy==2.1
 Flask-Testing==0.4.2
 Flask-WTF==0.12
-Jinja2==2.8
+Jinja2==2.11.3
 Pillow==6.2.0
 SQLAlchemy==1.0.9
 WTForms==2.0.2
